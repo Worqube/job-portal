@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+            trim: true,
+            lowercase: true,
         },
         password: {
             type: String,
@@ -15,15 +17,39 @@ const userSchema = new mongoose.Schema(
         fullname: {
             type: String,
             required: true,
+            trim: true,
         },
         profilepic: {
             type: String,
-            default: "",
         },
     },
     { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
+const detailSchema = new mongoose.Schema(
+    {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        phone: {
+            type: Number,
+            minlength: 10,
+            trim: true,
+        },
+        gender: {
+            type: String,
+        },
+        address: {
+            type: String,
+            trim: true,
+        },
+        postal_code: {
+            type: Number,
+            trim: true,
+        },
+    }
+);
 
-export default User;
+export const User = mongoose.model("User", userSchema);
+export const Detail = mongoose.model("Detail", detailSchema);
