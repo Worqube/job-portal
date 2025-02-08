@@ -37,3 +37,11 @@ export const signup = async (req, res) => {
         res.status(500).send(error)
     }
 };
+
+export const checkAuth = (req, res) => {
+    try {
+        res.status(200).send(req.user);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
