@@ -38,6 +38,33 @@ export const signup = async (req, res) => {
     }
 };
 
+export const login = async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ message: "All fields are required" });
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) return res.status(404).json({ message: "User not found" });
+        const isPassword = await bcrypt.compare(password, user.password);
+        if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
+
+        generateToken(user._id, res);
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+export const logout = (req, res) => {
+    try {
+        if (!res.cookie("token")) return res.status(404).json({ message: "Cookie not found!" });
+        res.cookie("token", "", { maxAge: 0 });
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
 export const checkAuth = (req, res) => {
     try {
         res.status(200).send(req.user);
