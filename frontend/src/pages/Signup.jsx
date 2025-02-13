@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
 import {
   User,
@@ -9,6 +10,7 @@ import {
   Lock,
   MessageSquare,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +28,7 @@ const Signup = () => {
       return toast.error("Invalid email format");
     if (!formData.password.trim()) return toast.error("Password is required");
     if (formData.password.length < 8)
-      return toast.error("Password must be at least 5 characters");
+      return toast.error("Password must be at least 8 characters");
 
     return true;
   };
@@ -37,124 +39,102 @@ const Signup = () => {
     if (success === true) signup(formData);
   };
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
-      {/* left side */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
-          {/* LOGO */}
-          <div className="text-center mb-8">
-            <div className="flex flex-col items-center gap-2 group">
-              <div
-                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
-          group-hover:bg-primary/20 transition-colors"
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-2xl">
+        <h2 className="text-3xl font-bold text-center text-gray-800">
+          Register
+        </h2>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <div className="flex items-center gap-2 py-2">
+              <User className="size-5" />
+              <label
+                htmlFor="email"
+                className="block font-bold text-xl text-gray-700"
               >
-                <MessageSquare className="size-6 text-primary" />
-              </div>
-              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">
-                Get started with your free account
-              </p>
+                Username
+              </label>
+            </div>
+            <input
+              type="text"
+              value={formData.username}
+              autoComplete="true"
+              className="w-full text-lg px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter your username"
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 py-2">
+              <Mail className="size-5" />
+              <label
+                htmlFor="email"
+                className="block font-bold text-xl text-gray-700"
+              >
+                Email
+              </label>
+            </div>
+            <input
+              type="text"
+              value={formData.email}
+              autoComplete="true"
+              className="w-full text-lg px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter your email"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 py-2">
+              <Lock className="size-5" />
+              <label
+                htmlFor="email"
+                className="block text-xl font-bold text-gray-700"
+              >
+                Password
+              </label>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="true"
+                className="w-full text-lg px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <Eye className="size-5" />
+                ) : (
+                  <EyeOff className="size-5" />
+                )}
+              </button>
             </div>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Username</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="username"
-                  value={formData.username}
-                  onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Email</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="you@example.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Password</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`input input-bordered w-full pl-10`}
-                  placeholder="•••••"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {" "}
-                  {showPassword ? (
-                    <EyeOff className="size-5 text-base-content/40" />
-                  ) : (
-                    <Eye className="size-5 text-base-content/40" />
-                  )}
-                </button>
-              </div>
-            </div>
-
+          <div className="pt-4">
             <button
               type="submit"
-              className="btn btn-primary w-full"
-              disabled={isSigningUp}
+              className="w-full px-4 py-2 text-xl text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
-              {isSigningUp ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Create Account"
-              )}
+              Sign up
             </button>
-          </form>
-
-          <div className="text-center">
-            <p className="text-base-content/60">
-              Already have an account?{" "}
-              {/* <Link to="/login" className="link link-primary">
-                Sign In
-              </Link> */}
-            </p>
           </div>
-        </div>
+        </form>
+        <p className="text-md text-center text-gray-600">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );

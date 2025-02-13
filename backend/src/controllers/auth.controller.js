@@ -5,7 +5,7 @@ import { generateToken } from "../lib/utils.js";
 export const signup = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-        if (!email || !password) {
+        if (!username || !email || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -13,7 +13,11 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "Password must be at least 8 letters" });
         }
 
-        let user = await User.findOne({ email: email });
+        let user = await User.findOne({ username: username });
+        if (user) return res.status(400).json({ message: "Username already exists" });
+        user = null
+
+        user = await User.findOne({ email: email });
         if (user) return res.status(400).json({ message: "Email already exist" });
 
         const salt = await bcrypt.genSalt(10);
