@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema(
 
 const detailSchema = new mongoose.Schema(
     {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
         fullname: {
             type: String,
             trim: true,
@@ -41,11 +46,8 @@ const detailSchema = new mongoose.Schema(
         profilepic: {
             type: String,
         },
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
+
+
         phone: {
             type: Number,
             minlength: 10,
