@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
     {
-        username: {
+        reg_id: {
             type: String,
             required: true,
             trim: true,
@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             minlength: 8,
+            default: reg_id,
         },
 
     },
@@ -43,11 +44,6 @@ const detailSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
-        profilepic: {
-            type: String,
-        },
-
-
         phone: {
             type: Number,
             minlength: 10,
@@ -64,6 +60,11 @@ const detailSchema = new mongoose.Schema(
             type: Number,
             trim: true,
         },
+        branch: {
+            type: String,
+            trim: true,
+            uppercase: true,
+        }
     }
 );
 

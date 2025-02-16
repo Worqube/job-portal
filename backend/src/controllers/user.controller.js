@@ -2,9 +2,9 @@ import { User, Detail } from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
 
 export const userProfile = async (req, res) => {
-  const username = req.query.username;
+  const regId = req.query.regId;
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ reg_id: regId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -15,9 +15,9 @@ export const userProfile = async (req, res) => {
 };
 
 export const userDetails = async (req, res) => {
-  const username = req.query.username;
+  const regId = req.query.regId;
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ reg_id: regId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -29,11 +29,11 @@ export const userDetails = async (req, res) => {
 };
 
 export const updateUserProfile = async (req, res) => {
-  const username = req.query.username;
+  const regId = req.query.regId;
   const { email, password } = req.body;
-  if (!username || !password) return res.status(400).json({ message: "All fields are required" });
+  if (!regId || !password) return res.status(400).json({ message: "All fields are required" });
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ reg_id: regId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -50,13 +50,13 @@ export const updateUserProfile = async (req, res) => {
 };
 
 export const updateUserDetails = async (req, res) => {
-  const username = req.query.username;
+  const regId = req.query.regId;
   const { password, fullname, profilepic, phone, address, gender, postal_code } = req.body;
 
-  if (!username || !password) return res.status(400).json({ message: "Username and Password is required" });
+  if (!regId || !password) return res.status(400).json({ message: "RegId and Password is required" });
 
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ reg_id: regId });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password)

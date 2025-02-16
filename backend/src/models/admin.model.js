@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const companySchema = new mongoose.Schema(
+const adminSchema = new mongoose.Schema(
     {
         username: {
             type: String,
@@ -20,6 +20,7 @@ const companySchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
+            default: username,
         },
     },
     { timestamps: true },
@@ -32,19 +33,24 @@ const companySchema = new mongoose.Schema(
     },
 );
 
-const companyDetailSchema = new mongoose.Schema(
+const adminDetailSchema = new mongoose.Schema(
     {
-        companyId: {
+        adminId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Company",
+            ref: "Admin",
             required: true,
         },
-        company_name: {
+        name: {
             type: String,
             trim: true,
         },
+        branch: {
+            type: String,
+            uppercase: true,
+            required: true,
+        }
     },
 );
 
-export const Company = mongoose.model("Company", companySchema);
-export const CompanyDetail = mongoose.model("CompanyDetail", companyDetailSchema);
+export const Admin = mongoose.model("Admin", adminSchema);
+export const AdminDetail = mongoose.model("AdminDetail", adminDetailSchema);
