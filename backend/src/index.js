@@ -15,7 +15,7 @@ const PORT = process.env.PORT
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-    origin: 'https://warm-genie-7e847b.netlify.app',
+    origin: 'https://worqube.netlify.app',
     credentials: true,
 }))
 
