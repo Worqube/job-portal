@@ -15,7 +15,7 @@ const PORT = process.env.PORT
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://warm-genie-7e847b.netlify.app',
     credentials: true,
 }))
 
