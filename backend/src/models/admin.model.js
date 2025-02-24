@@ -9,18 +9,10 @@ const adminSchema = new mongoose.Schema(
             unique: true,
             lowercase: true
         },
-        email: {
-            type: email,
-            required: true,
-            unique: true,
-            trim: true,
-            lowercase: true,
-        },
         password: {
             type: String,
             required: true,
             trim: true,
-            default: username,
         },
     },
     { timestamps: true },
@@ -43,6 +35,12 @@ const adminDetailSchema = new mongoose.Schema(
         name: {
             type: String,
             trim: true,
+        },
+        email: {
+            type: String,
+            unique: true,
+            trim: true,
+            lowercase: true,
         },
         branch: {
             type: String,

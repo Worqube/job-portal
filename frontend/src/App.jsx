@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Signup from "./pages/Signup";
+import StudentSignup from "./pages/StudentSignup";
+import StudentLogin from "./pages/StudentLogin";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import { useAuthStore } from "./store/useAuthStore";
@@ -31,7 +32,7 @@ const App = () => {
         />
         <Route
           path="/signup"
-          element={!authUser ? <Signup /> : <Navigate to="/" />}
+          element={!authUser ? <StudentSignup /> : <Navigate to="/" />}
         />
         <Route
           path="/login"

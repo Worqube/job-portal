@@ -1,11 +1,38 @@
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js";
+import { Admin } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
 
-export const signup = async (req, res) => {
-    const { username, email, password } = req.body;
+export const asignup = async (req, res) => {
+    const { username, password } = req.body;
     try {
-        if (!username || !email || !password) {
+        let admin = await Admin.findOne({ username });
+        if (admin) return res.status(400).json({ message: "Username already exists" });
+        admin = null;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPW = await bcrypt.hash(password, salt);
+
+        const newAdmin = new Admin({
+            username: username,
+            password: hashedPW,
+        });
+
+        if (newAdmin) {
+            generateToken(newAdmin._id, res);
+            await newAdmin.save();
+            res.status(201).send(newAdmin);
+        } else {
+            res.status(400).json({ message: "Failed to create new admin" });
+        }
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+export const signup = async (req, res) => {
+    const { reg_id, email, password } = req.body;
+    try {
+        if (!reg_id || !email || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -13,8 +40,8 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "Password must be at least 8 letters" });
         }
 
-        let user = await User.findOne({ username: username });
-        if (user) return res.status(400).json({ message: "Username already exists" });
+        let user = await User.findOne({ reg_id: reg_id });
+        if (user) return res.status(400).json({ message: "Reg Id already exists" });
         user = null
 
         user = await User.findOne({ email: email });
@@ -24,7 +51,7 @@ export const signup = async (req, res) => {
         const hashedPW = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            username: username,
+            reg_id: reg_id,
             email: email,
             password: hashedPW,
         });
@@ -43,17 +70,34 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ message: "All fields are required" });
+    const { reg_id, password } = req.body;
+    if (!reg_id || !password) return res.status(400).json({ message: "All fields are required" });
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ reg_id });
         if (!user) return res.status(404).json({ message: "User not found" });
         const isPassword = await bcrypt.compare(password, user.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
         generateToken(user._id, res);
         res.status(200).send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+export const alogin = async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ message: "All fields are required" });
+
+    try {
+        const admin = await Admin.findOne({ username });
+        if (!admin) return res.status(404).json({ message: "Admin not found" });
+        const isPassword = await bcrypt.compare(password, admin.password);
+        if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
+
+        generateToken(admin._id, res);
+        res.status(200).send(admin);
     } catch (error) {
         res.status(500).send(error);
     }

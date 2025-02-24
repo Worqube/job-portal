@@ -5,6 +5,7 @@ import cors from 'cors';
 import { connectDB } from "./lib/db.js";
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 
 dotenv.config();
@@ -18,7 +19,8 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use('/users', userRoutes)
+app.use('/users', userRoutes);
+app.use('admin', adminRoutes);
 app.use('/auth', authRoutes);
 
 app.listen(PORT, () => {

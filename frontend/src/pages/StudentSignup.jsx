@@ -12,17 +12,17 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Signup = () => {
+const StudentSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    reg_id: "",
     email: "",
     password: "",
   });
   const { signup, isSigningUp } = useAuthStore();
   const validateForm = () => {
     // validate the form
-    if (!formData.username.trim()) return toast.error("Username is required");
+    if (!formData.reg_id.trim()) return toast.error("Reg Id is required");
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+\.\S+/.test(formData.email))
       return toast.error("Invalid email format");
@@ -48,21 +48,18 @@ const Signup = () => {
           <div>
             <div className="flex items-center gap-2 py-2">
               <User className="size-5" />
-              <label
-                htmlFor="email"
-                className="block font-bold text-xl text-gray-700"
-              >
-                Username
+              <label className="block font-bold text-xl text-gray-700">
+                Registration Id
               </label>
             </div>
             <input
               type="text"
-              value={formData.username}
+              value={formData.reg_id}
               autoComplete="true"
               className="w-full text-lg px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter your username"
+              placeholder="Enter your Registration Id"
               onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
+                setFormData({ ...formData, reg_id: e.target.value })
               }
             />
           </div>
@@ -140,4 +137,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default StudentSignup;
