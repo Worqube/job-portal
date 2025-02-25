@@ -82,8 +82,12 @@ export const login = async (req, res) => {
         const isPassword = await bcrypt.compare(password, user.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        const token = generateToken(user._id);
-        return res.status(200).json({ token, user });
+        generateToken(user._id, res);
+        res.json({
+            _id: user._id,
+            reg_id: user.reg_id,
+            email: user.email,
+        });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -116,15 +120,13 @@ export const logout = (req, res) => {
     }
 };
 
-export const checkAuth = async (req, res) => {
+export const checkAuth = (req, res) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const token = req.cookies.token;
         if (!token) return res.status(401).json({ message: "No token provided" });
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id).select("-password");
-        if (!user) return res.status(404).json({ message: "User not found" });
-        return res.status(200).send(req.user);
+        res.json({ userId: decoded.userId })
     } catch (error) {
         res.status(500).send(error.message);
     }

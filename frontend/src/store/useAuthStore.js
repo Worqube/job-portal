@@ -9,18 +9,13 @@ export const useAuthStore = create((set) => ({
     isLoggingIn: false,
     isLoggingOut: false,
 
-    checkAuth: async (data) => {
+    checkAuth: async () => {
         set({ isCheckingAuth: true });
-        const token = sessionStorage.getItem("token");
-        if (!token) {
-            set({ authUser: null, isCheckingAuth: false });
-            return;
-        }
         try {
             const res = await axiosInstance.get('/auth/check', {
-                headers: { Authorization: `Bearer ${token}` }
+                withCredentials: true,
             });
-            set({ authUser: res.data.user });
+            set({ authUser: res.userId });
         } catch (error) {
             set({ authUser: null });
         } finally {
@@ -42,14 +37,16 @@ export const useAuthStore = create((set) => ({
             set({ isSigningUp: false });
         }
     },
-    login: async (data) => {
+    login: async (credentials) => {
         set({ isLoggingIn: true });
         try {
-            const res = await axiosInstance.post("/auth/login", data);
-            set({ authUser: res.data.user });
-            sessionStorage.setItem("token", res.data.token);
+            const res = await axiosInstance.post("/auth/login", credentials, {
+                withCredentials: true,
+            });
+            set({ authUser: res });
             toast.success("Logged in successfully");
         } catch (error) {
+            set({ authUser: null })
             toast.error(error.response.data.message);
         } finally {
             set({ isLoggingIn: false });
@@ -67,11 +64,11 @@ export const useAuthStore = create((set) => ({
             set({ isLoggingIn: false });
         }
     },
-    logout: () => {
+    logout: async () => {
         set({ isLoggingOut: true });
         try {
-            const res = axiosInstance.post("/auth/logout");
-            sessionStorage.removeItem("token");
+            await axiosInstance.post("/auth/logout", {}, { withCredentials: true });
+            set({ authUser: null });
             toast.success("Logged out successfully!");
         } catch (error) {
             toast.error(error.response.data.message);
