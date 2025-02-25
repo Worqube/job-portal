@@ -11,9 +11,16 @@ export const useAuthStore = create((set) => ({
 
     checkAuth: async () => {
         set({ isCheckingAuth: true });
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+            set({ authUser: null, isCheckingAuth: false });
+            return;
+        }
         try {
-            const res = await axiosInstance.get('/auth/check');
-            set({ authUser: res.data });
+            const res = await axiosInstance.get('/auth/check', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            set({ authUser: res.data.user });
         } catch (error) {
             set({ authUser: null });
         } finally {

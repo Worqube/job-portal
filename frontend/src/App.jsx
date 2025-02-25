@@ -13,11 +13,11 @@ const App = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   console.log({ authUser });
 
-  if (isCheckingAuth && !authUser)
+  if (isCheckingAuth)
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
