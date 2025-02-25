@@ -9,7 +9,7 @@ export const useAuthStore = create((set) => ({
     isLoggingIn: false,
     isLoggingOut: false,
 
-    checkAuth: async () => {
+    checkAuth: async (data) => {
         set({ isCheckingAuth: true });
         const token = sessionStorage.getItem("token");
         if (!token) {
@@ -46,7 +46,7 @@ export const useAuthStore = create((set) => ({
         set({ isLoggingIn: true });
         try {
             const res = await axiosInstance.post("/auth/login", data);
-            set({ authUser: res.data });
+            set({ authUser: res.data.user });
             sessionStorage.setItem("token", res.data.token);
             toast.success("Logged in successfully");
         } catch (error) {
