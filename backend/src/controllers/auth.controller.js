@@ -19,9 +19,9 @@ export const asignup = async (req, res) => {
         });
 
         if (newAdmin) {
-            generateToken(newAdmin._id, res);
+            const token = generateToken(newAdmin._id);
             await newAdmin.save();
-            res.status(201).send(newAdmin);
+            res.status(201).send(newAdmin).json({ token, userId: newAdmin._id });
         } else {
             res.status(400).json({ message: "Failed to create new admin" });
         }
@@ -57,9 +57,9 @@ export const signup = async (req, res) => {
         });
 
         if (newUser) {
-            generateToken(newUser._id, res);
+            const token = generateToken(newUser._id, res);
             await newUser.save();
-            res.status(201).send(newUser)
+            res.status(201).send(newUser).json({ token, userId: newUser._id });
         } else {
             res.status(400).json({ message: "Invalid User Data" })
         }
@@ -79,8 +79,8 @@ export const login = async (req, res) => {
         const isPassword = await bcrypt.compare(password, user.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        generateToken(user._id, res);
-        res.status(200).send(user);
+        const token = generateToken(user._id, res);
+        res.status(200).send(user).json({ token, userId: user._id });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -96,8 +96,8 @@ export const alogin = async (req, res) => {
         const isPassword = await bcrypt.compare(password, admin.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        generateToken(admin._id, res);
-        res.status(200).send(admin);
+        const token = generateToken(admin._id, res);
+        res.status(200).send(admin).json({ token, userId: admin._id });
     } catch (error) {
         res.status(500).send(error);
     }
