@@ -56,10 +56,12 @@ export const signup = async (req, res) => {
             password: hashedPW,
         });
 
+        await newUser.save();
+
         if (newUser) {
-            const token = generateToken(newUser._id, res);
+            const token = generateToken(newUser._id);
             await newUser.save();
-            res.status(201).send(newUser).json({ token, userId: newUser._id });
+            res.status(201).json({ token, userId: newUser._id });
         } else {
             res.status(400).json({ message: "Invalid User Data" })
         }
@@ -79,8 +81,8 @@ export const login = async (req, res) => {
         const isPassword = await bcrypt.compare(password, user.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        const token = generateToken(user._id, res);
-        res.status(200).send(user).json({ token, userId: user._id });
+        const token = generateToken(user._id);
+        res.status(200).json({ token, userId: user._id });
     } catch (error) {
         res.status(500).send(error);
     }
