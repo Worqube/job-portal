@@ -45,7 +45,6 @@ const adminDetailSchema = new mongoose.Schema(
         branch: {
             type: String,
             uppercase: true,
-            required: true,
         }
     },
 );
