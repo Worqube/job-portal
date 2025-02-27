@@ -20,7 +20,7 @@ export const asignup = async (req, res) => {
         });
 
         const newAdminDetails = new AdminDetail({
-            admin: newAdmin._id,
+            adminId: newAdmin._id,
         });
         await newAdmin.save();
 
@@ -65,7 +65,7 @@ export const signup = async (req, res) => {
         await newUser.save();
 
         const newDetails = new Detail({
-            user: newUser._id,
+            userId: newUser._id,
         });
         await newDetails.save();
 
