@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import { Detail, User } from "../models/user.model.js";
 import { Admin, AdminDetail } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
-import jwt from 'jsonwebtoken';
 
 export const asignup = async (req, res) => {
     const { username, password } = req.body;
