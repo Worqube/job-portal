@@ -20,18 +20,19 @@ export const asignup = async (req, res) => {
         });
 
         if (newAdmin) {
-            const token = generateToken(newAdmin._id);
             await newAdmin.save();
             const newAdminDetails = new AdminDetail({
                 adminId: newAdmin._id,
             });
             await newAdminDetails.save();
+            console.log(newAdmin, newAdminDetails);
+            const token = generateToken(newAdmin._id);
             res.status(201).send(newAdmin).json({ token, userId: newAdmin._id });
         } else {
             res.status(400).json({ message: "Failed to create new admin" });
         }
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error.response.message.body);
     }
 }
 export const signup = async (req, res) => {
