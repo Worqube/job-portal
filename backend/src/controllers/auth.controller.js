@@ -9,7 +9,6 @@ export const asignup = async (req, res) => {
     try {
         let admin = await Admin.findOne({ username });
         if (admin) return res.status(400).json({ message: "Username already exists" });
-        admin = null;
 
         const salt = await bcrypt.genSalt(10);
         const hashedPW = await bcrypt.hash(password, salt);
@@ -20,18 +19,19 @@ export const asignup = async (req, res) => {
         });
 
         if (newAdmin) {
+            generateToken(newAdmin._id, res);
             await newAdmin.save();
             const newAdminDetails = new AdminDetail({
                 adminId: newAdmin._id,
             });
             await newAdminDetails.save();
             console.log(newAdmin, newAdminDetails);
-            const token = generateToken(newAdmin._id);
-            res.status(201).send(newAdmin).json({ token, userId: newAdmin._id });
+            res.status(201).json({ newAdmin });
         } else {
             res.status(400).json({ message: "Failed to create new admin" });
         }
     } catch (error) {
+        console.log("Error in signup controller", error);
         res.status(500).json(error.message);
     }
 }
@@ -48,7 +48,6 @@ export const signup = async (req, res) => {
 
         let user = await User.findOne({ reg_id: reg_id });
         if (user) return res.status(400).json({ message: "Reg Id already exists" });
-        user = null
 
         user = await User.findOne({ email: email });
         if (user) return res.status(400).json({ message: "Email already exist" });
@@ -62,19 +61,14 @@ export const signup = async (req, res) => {
             password: hashedPW,
         });
 
-        const newDetails = new Detail({
-            userId: newUser._id,
-        });
-        await newDetails.save();
-
         if (newUser) {
-            const token = generateToken(newUser._id);
+            generateToken(newUser._id, res);
             await newUser.save();
             const newDetails = new Detail({
                 userId: newUser._id,
             });
             await newDetails.save();
-            res.status(201).json({ token, userId: newUser._id });
+            res.status(201).json({ newUser });
         } else {
             res.status(400).json({ message: "Invalid User Data" })
         }
@@ -124,7 +118,6 @@ export const alogin = async (req, res) => {
 
 export const logout = (req, res) => {
     try {
-        if (!res.cookie("token")) return res.status(404).json({ message: "Cookie not found!" });
         res.cookie("token", "", { maxAge: 0 });
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
@@ -134,12 +127,9 @@ export const logout = (req, res) => {
 
 export const checkAuth = (req, res) => {
     try {
-        const token = req.cookies.token;
-        if (!token) return res.status(401).json({ message: "No token provided" });
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ userId: decoded.userId })
+        res.status(200).json(req.user);
     } catch (error) {
+        console.log("Error in checkAuth controller", error);
         res.status(500).send(error.message);
     }
 };

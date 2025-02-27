@@ -12,10 +12,8 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
         set({ isCheckingAuth: true });
         try {
-            const res = await axiosInstance.get('/auth/check', {
-                withCredentials: true,
-            });
-            set({ authUser: res.userId });
+            const res = await axiosInstance.get('/auth/check');
+            set({ authUser: res.data });
         } catch (error) {
             set({ authUser: null });
         } finally {
@@ -27,7 +25,6 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post('/auth/signup', data);
             set({ authUser: res.data });
-            sessionStorage.setItem("token", res.data.token);
             toast.success("Account created successfully");
         } catch (error) {
             console.log(error)
