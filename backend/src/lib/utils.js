@@ -9,7 +9,7 @@ export const generateToken = (userId, res) => {
         maxAge: 24 * 60 * 60 * 1000, // 1 day
         httpOnly: true, // Prevent client-side access
         secure: false, // Secure in production
-        sameSite: "strict", // Allows cross-site requests
+        sameSite: "lax", // Allows cross-site requests
     });
 
     return token;
