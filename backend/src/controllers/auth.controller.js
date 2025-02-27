@@ -22,11 +22,15 @@ export const asignup = async (req, res) => {
         const newAdminDetails = new AdminDetail({
             adminId: newAdmin._id,
         });
-        await newAdmin.save();
+        await newAdminDetails.save();
 
         if (newAdmin) {
             const token = generateToken(newAdmin._id);
             await newAdmin.save();
+            const newAdminDetails = new AdminDetail({
+                adminId: newAdmin._id,
+            });
+            await newAdminDetails.save();
             res.status(201).send(newAdmin).json({ token, userId: newAdmin._id });
         } else {
             res.status(400).json({ message: "Failed to create new admin" });
@@ -62,8 +66,6 @@ export const signup = async (req, res) => {
             password: hashedPW,
         });
 
-        await newUser.save();
-
         const newDetails = new Detail({
             userId: newUser._id,
         });
@@ -72,6 +74,10 @@ export const signup = async (req, res) => {
         if (newUser) {
             const token = generateToken(newUser._id);
             await newUser.save();
+            const newDetails = new Detail({
+                userId: newUser._id,
+            });
+            await newDetails.save();
             res.status(201).json({ token, userId: newUser._id });
         } else {
             res.status(400).json({ message: "Invalid User Data" })
