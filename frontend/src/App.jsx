@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import StudentSignup from "./pages/StudentSignup";
-import StudentLogin from "./pages/StudentLogin";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import { useAuthStore } from "./store/useAuthStore";
