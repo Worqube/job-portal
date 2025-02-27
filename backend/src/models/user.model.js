@@ -32,15 +32,6 @@ const userSchema = new mongoose.Schema(
     },
 );
 
-userSchema.post("save", async function (doc) {
-    const details = mongoose.model("Detail");
-    try {
-        await details.create({ user: doc._id });
-    } catch (error) {
-        console.error("Error creating details: ", error);
-    }
-});
-
 const detailSchema = new mongoose.Schema(
     {
         userId: {
