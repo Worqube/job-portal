@@ -19,11 +19,6 @@ export const asignup = async (req, res) => {
             password: hashedPW,
         });
 
-        const newAdminDetails = new AdminDetail({
-            adminId: newAdmin._id,
-        });
-        await newAdminDetails.save();
-
         if (newAdmin) {
             const token = generateToken(newAdmin._id);
             await newAdmin.save();
