@@ -65,7 +65,8 @@ const detailSchema = new mongoose.Schema(
             trim: true,
             uppercase: true,
         }
-    }
+    },
+    { timestamps: true }
 );
 
 export const User = mongoose.model("User", userSchema);
