@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import { User } from "../models/user.model.js";
-import { Admin } from "../models/admin.model.js";
+import { Detail, User } from "../models/user.model.js";
+import { Admin, AdminDetail } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
 import jwt from 'jsonwebtoken';
 
@@ -18,6 +18,11 @@ export const asignup = async (req, res) => {
             username: username,
             password: hashedPW,
         });
+
+        const newAdminDetails = new AdminDetail({
+            admin: newAdmin._id,
+        });
+        await newAdmin.save();
 
         if (newAdmin) {
             const token = generateToken(newAdmin._id);
@@ -58,6 +63,11 @@ export const signup = async (req, res) => {
         });
 
         await newUser.save();
+
+        const newDetails = new Detail({
+            user: newUser._id,
+        });
+        await newDetails.save();
 
         if (newUser) {
             const token = generateToken(newUser._id);
