@@ -16,7 +16,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(cors({
     origin: 'https://worqube.netlify.app',
-    credentials: true,
 }))
 
 app.use('/users', userRoutes);
