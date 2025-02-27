@@ -17,10 +17,6 @@ app.use(express.json());
 app.use(cors({
     origin: 'https://worqube.netlify.app',
     credentials: true,
-    allowedHeaders: {
-        "Access-Control-Allow-Origin": "https://worqube.netlify.app",
-        "Access-Control-Allow-Credentials": true,
-    }
 }))
 
 app.use('/users', userRoutes);
