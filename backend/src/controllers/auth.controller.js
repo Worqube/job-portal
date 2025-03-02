@@ -117,7 +117,11 @@ export const alogin = async (req, res) => {
 
 export const logout = (req, res) => {
     try {
-        res.cookie("token", "", { maxAge: 0 });
+        res.cookie("token", "", {
+            maxAge: 0,
+            domain: 'job-portal-6nsa.onrender.com',
+            path: '/',
+        });
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
         res.status(500).send(error);

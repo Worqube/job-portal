@@ -6,10 +6,12 @@ export const generateToken = (userId, res) => {
     });
 
     res.cookie("token", token, {
+        domain: 'job-portal-6nsa.onrender.com',
+        path: "/",
         maxAge: 24 * 60 * 60 * 1000, // 1 day
         httpOnly: true, // Prevent client-side access
         secure: true, // Secure in production
-        sameSite: "lax", // Allows cross-site requests
+        sameSite: "none", // Allows cross-site requests
     });
 
     return token;
