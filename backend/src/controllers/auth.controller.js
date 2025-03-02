@@ -120,7 +120,7 @@ export const logout = (req, res) => {
         res.cookie("token", "", {
             maxAge: 0,
             domain: 'job-portal-6nsa.onrender.com',
-            path: '/',
+            path: '/auth/check',
         });
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
