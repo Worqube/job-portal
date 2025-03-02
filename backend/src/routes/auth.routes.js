@@ -9,6 +9,6 @@ router.post('/adminsignup', asignup);
 router.post('/login', login);
 router.post('/adminlogin', alogin);
 router.post('/logout', logout);
-router.get('/check', checkAuth);
+router.get('/check', protectRoute, checkAuth);
 
 export default router;

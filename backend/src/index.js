@@ -12,8 +12,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT
 
-app.use(cookieParser());
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
     origin: 'https://worqube.onrender.com',
     credentials: true,
