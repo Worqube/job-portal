@@ -10,12 +10,6 @@ import { Loader } from "lucide-react";
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  console.log({ authUser });
-
   if (isCheckingAuth)
     return (
       <div className="flex items-center justify-center h-screen">
