@@ -16,7 +16,7 @@ export const useAuthStore = create(
                 const user = sessionStorage.getItem('user');
                 set({ authUser: JSON.parse(user) });
                 set({ isCheckingAuth: true });
-                if (!authUser) {
+                if (authUser === null) {
                     try {
                         const res = await axiosInstance.get('/auth/check', { withCredentials: true });
                         set({ authUser: res.data });
