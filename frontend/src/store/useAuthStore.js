@@ -72,6 +72,7 @@ export const useAuthStore = create(
                 try {
                     if (user) {
                         sessionStorage.removeItem('user');
+                        set({ authUser: null })
                     } else {
                         await axiosInstance.post('/auth/logout');
                         set({ authUser: null });
