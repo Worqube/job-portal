@@ -12,6 +12,8 @@ export const useAuthStore = create((set) => ({
     checkAuth: async () => {
         const loggedUser = sessionStorage.getItem('user');
         const loggedAdmin = sessionStorage.getItem('admin');
+        const user = loggedUser ? JSON.parse(loggedUser) : null;
+        const admin = loggedAdmin ? JSON.parse(loggedAdmin) : null;
         if (!loggedUser || !loggedAdmin) {
             try {
                 const res = await axiosInstance.get('/auth/check', { withCredentials: true });
@@ -23,7 +25,7 @@ export const useAuthStore = create((set) => ({
             }
         }
         else {
-            set({ authUser: JSON.parse(loggedUser) || JSON.parse(loggedAdmin), isCheckingAuth: false });
+            set({ authUser: user || admin, isCheckingAuth: false });
         }
     },
     signup: async (data) => {
