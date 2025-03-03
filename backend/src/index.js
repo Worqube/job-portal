@@ -18,7 +18,7 @@ app.use(cors({
     origin: [
         'https://worqube.onrender.com',
         'https://worqube.netlify.app',
-        'http://localhost:5173',
+        // 'http://localhost:5173',
     ],
     credentials: true,
 }))
