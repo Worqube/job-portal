@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
+import Navbar from "./pages/components/Navbar";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -24,6 +25,7 @@ const App = () => {
     );
   return (
     <div className="items-center">
+      <Navbar />
       <Routes>
         <Route
           path="/"
