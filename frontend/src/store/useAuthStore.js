@@ -10,13 +10,20 @@ export const useAuthStore = create((set) => ({
     isLoggingOut: false,
 
     checkAuth: async () => {
-        try {
-            const res = await axiosInstance.get('/auth/check', { withCredentials: true });
-            set({ authUser: res.data });
-        } catch (error) {
-            set({ authUser: null });
-        } finally {
-            set({ isCheckingAuth: false })
+        const loggedUser = sessionStorage.getItem('user');
+        const loggedAdmin = sessionStorage.getItem('admin');
+        if (!loggedUser || !loggedAdmin) {
+            try {
+                const res = await axiosInstance.get('/auth/check', { withCredentials: true });
+                set({ authUser: res.data });
+            } catch (error) {
+                set({ authUser: null });
+            } finally {
+                set({ isCheckingAuth: false })
+            }
+        }
+        else {
+            set({ authUser: loggedUser || loggedAdmin, isCheckingAuth: false });
         }
     },
     signup: async (data) => {
@@ -24,6 +31,7 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post('/auth/signup', data, { withCredentials: true });
             set({ authUser: res.data });
+            sessionStorage.setItem('user', authUser);
             toast.success("Account created successfully");
         } catch (error) {
             console.log(error)
@@ -40,6 +48,7 @@ export const useAuthStore = create((set) => ({
                 withCredentials: true,
             });
             set({ authUser: res.data });
+            sessionStorage.setItem('user', authUser);
             toast.success("Logged in successfully");
         } catch (error) {
             set({ authUser: null })
@@ -53,6 +62,7 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post("/auth/adminlogin", data, { withCredentials: true });
             set({ authUser: res.data });
+            sessionStorage.setItem('admin', authUser);
             toast.success("Logged in successfully");
         } catch (error) {
             toast.error(error.response.data.message);
@@ -65,7 +75,8 @@ export const useAuthStore = create((set) => ({
         try {
             await axiosInstance.post("/auth/logout");
             set({ authUser: null });
-
+            sessionStorage.removeItem('user');
+            sessionStorage.removeItem('admin');
             toast.success("Logged out successfully!");
         } catch (error) {
             toast.error(error.response.data.message);
