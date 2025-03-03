@@ -23,7 +23,7 @@ export const useAuthStore = create((set) => ({
             }
         }
         else {
-            set({ authUser: loggedUser || loggedAdmin, isCheckingAuth: false });
+            set({ authUser: JSON.parse(loggedUser) || JSON.parse(loggedAdmin), isCheckingAuth: false });
         }
     },
     signup: async (data) => {
