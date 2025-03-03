@@ -60,10 +60,11 @@ export const useAuthStore = create(
                 try {
                     const res = await axiosInstance.post('/auth/adminlogin', data, { withCredentials: true });
                     set({ authUser: res.data });
-                    sessionStorage.setItem("user", JSON.stringify(res.data));
+                    // sessionStorage.setItem("user", JSON.stringify(res.data));
                     toast.success('Logged in successfully');
                 } catch (error) {
-                    toast.error(error);
+                    set({ authUser: null });
+                    toast.error("Error in controller");
                 } finally {
                     set({ isLoggingIn: false });
                 }
