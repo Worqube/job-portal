@@ -63,7 +63,7 @@ export const useAuthStore = create(
                     sessionStorage.setItem("user", JSON.stringify(res.data));
                     toast.success('Logged in successfully');
                 } catch (error) {
-                    toast.error(error.response.data.message);
+                    toast.error(error);
                 } finally {
                     set({ isLoggingIn: false });
                 }
