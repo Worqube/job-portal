@@ -52,7 +52,7 @@ export const useAuthStore = create((set) => ({
             toast.success("Logged in successfully");
         } catch (error) {
             set({ authUser: null })
-            toast.error(error.response.data.message);
+            toast.error("Error in controller");
         } finally {
             set({ isLoggingIn: false });
         }
