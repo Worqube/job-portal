@@ -60,7 +60,7 @@ export const useAuthStore = create(
                 try {
                     const res = await axiosInstance.post('/auth/adminlogin', data, { withCredentials: true });
                     set({ authUser: res.data });
-                    // sessionStorage.setItem("user", JSON.stringify(res.data));
+                    sessionStorage.setItem("user", JSON.stringify(res.data));
                     toast.success('Logged in successfully');
                 } catch (error) {
                     set({ authUser: null });
