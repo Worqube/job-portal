@@ -18,6 +18,8 @@ export const useAuthStore = create((set) => ({
             try {
                 const res = await axiosInstance.get('/auth/check', { withCredentials: true });
                 set({ authUser: res.data });
+                console.log("No user or admin");
+                console.log(authUser);
             } catch (error) {
                 set({ authUser: null });
             } finally {
@@ -26,6 +28,7 @@ export const useAuthStore = create((set) => ({
         }
         else {
             set({ authUser: user || admin, isCheckingAuth: false });
+            console.log(authUser)
         }
     },
     signup: async (data) => {
