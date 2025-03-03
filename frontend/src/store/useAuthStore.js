@@ -32,6 +32,7 @@ export const useAuthStore = create(
                 try {
                     const res = await axiosInstance.post('/auth/signup', data, { withCredentials: true });
                     set({ authUser: res.data });
+                    sessionStorage.setItem("user", JSON.stringify(res.data));
                     toast.success('Account created successfully');
                 } catch (error) {
                     console.log(error);
@@ -59,6 +60,7 @@ export const useAuthStore = create(
                 try {
                     const res = await axiosInstance.post('/auth/adminlogin', data, { withCredentials: true });
                     set({ authUser: res.data });
+                    sessionStorage.setItem("user", JSON.stringify(res.data));
                     toast.success('Logged in successfully');
                 } catch (error) {
                     toast.error(error.response.data.message);
