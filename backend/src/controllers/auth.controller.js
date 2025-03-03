@@ -108,8 +108,11 @@ export const alogin = async (req, res) => {
         const isPassword = await bcrypt.compare(password, admin.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        const token = generateToken(admin._id, res);
-        res.status(200).send(admin).json({ token, userId: admin._id });
+        generateToken(admin._id, res);
+        res.json({
+            _id: admin._id,
+            username: admin.username,
+        });
     } catch (error) {
         res.status(500).send(error);
     }
