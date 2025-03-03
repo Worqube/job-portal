@@ -48,7 +48,7 @@ export const useAuthStore = create((set) => ({
                 withCredentials: true,
             });
             set({ authUser: res.data });
-            sessionStorage.setItem('user', authUser);
+            // sessionStorage.setItem('user', authUser);
             toast.success("Logged in successfully");
         } catch (error) {
             set({ authUser: null })
