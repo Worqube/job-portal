@@ -36,10 +36,12 @@ const App = () => {
         <Route
           path="/signup"
           element={
-            authUser.verified ? (
-              <Navigate to="/" />
-            ) : authUser.verificationToken ? (
-              <Verify />
+            authUser ? (
+              authUser.verified ? (
+                <Navigate to="/" />
+              ) : (
+                <Verify />
+              )
             ) : (
               <StudentSignup />
             )
