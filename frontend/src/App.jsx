@@ -8,6 +8,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import Navbar from "./pages/components/Navbar";
 import Profile from "./pages/Profile";
+import Verify from "./pages/components/Verify";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -34,7 +35,15 @@ const App = () => {
         />
         <Route
           path="/signup"
-          element={!authUser ? <StudentSignup /> : <Navigate to="/" />}
+          element={
+            authUser.verified ? (
+              <Navigate to="/" />
+            ) : authUser.verificationToken ? (
+              <Verify />
+            ) : (
+              <StudentSignup />
+            )
+          }
         />
         <Route
           path="/login"
