@@ -9,7 +9,7 @@ router.post('/adminsignup', asignup);
 router.post('/login', login);
 router.post('/adminlogin', alogin);
 router.post('/logout', logout);
-router.post('/verify/:reg_id', verify);
+router.post('/verify/:reg_id/:token', verify, login);
 router.get('/check', protectRoute, checkAuth);
 
 export default router;

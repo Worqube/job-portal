@@ -1,10 +1,34 @@
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 import { Detail, User } from "../models/user.model.js";
 import { Admin, AdminDetail } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
 
-async function sendEmail(req, res) {
-}
+async function sendEmail(user) {
+    const token = crypto.randomBytes(32).toString('hex');
+    user.verificationToken = token;
+    await user.save();
+
+    const verificationURL = `https://job-portal-6nsa.onrender.com/verify/${user.reg_id}/${token}`;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'worqubeofficial@gmail.com',
+            pass: 'WorkCube#123'
+        },
+    });
+
+    const mailOptions = {
+        from: 'worqubeofficial@gmail.com',
+        to: user.email,
+        subject: 'Verify your email',
+        text: `Please click on the link to verify your email: ${verificationURL}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
 
 export const asignup = async (req, res) => {
     const { username, password } = req.body;
@@ -70,6 +94,7 @@ export const signup = async (req, res) => {
                 userId: newUser._id,
             });
             await newDetails.save();
+            await sendEmail(newUser);
             res.status(201).json({ newUser });
         } else {
             res.status(400).json({ message: "Invalid User Data" })
@@ -90,12 +115,17 @@ export const login = async (req, res) => {
         const isPassword = await bcrypt.compare(password, user.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
-        generateToken(user._id, res);
-        res.json({
-            _id: user._id,
-            reg_id: user.reg_id,
-            email: user.email,
-        });
+        if (user.verified) {
+            generateToken(user._id, res);
+            res.json({
+                _id: user._id,
+                reg_id: user.reg_id,
+                email: user.email,
+            });
+        } else {
+            const link = `https://job-portal-6nsa/verify/${user.reg_id}/${user.verificationToken}`;
+            res.json({ message: `Follow this link to verify ${link}` });
+        }
     } catch (error) {
         res.status(500).send(error);
     }
@@ -121,18 +151,20 @@ export const alogin = async (req, res) => {
     }
 };
 
-export const verify = async (req, res) => {
+export const verify = async (req, res, next) => {
+    const { reg_id, token } = req.params;
     try {
-        const reg_id = req.params;
         const user = await User.findOne({ reg_id });
+        if (!user) return res.status(400).json({ message: "Invalid link" });
+        if (user.verificationToken !== token) return res.status(400).send("Invalid or expired token");
         user.verified = true;
+        user.verificationToken = undefined;
         await user.save();
-        res.status(200).json({ _id: user._id, reg_id: user.reg_id, verified: user.verified });
+        req.user = user;
+        next();
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).send("Server error");
     }
-
-
 }
 
 export const logout = (req, res) => {
