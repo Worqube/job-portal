@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import Navbar from "./pages/components/Navbar";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -39,6 +40,7 @@ const App = () => {
           path="/login"
           element={!authUser ? <Login /> : <Navigate to="/" />}
         />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Toaster />
     </div>

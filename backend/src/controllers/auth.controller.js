@@ -3,6 +3,9 @@ import { Detail, User } from "../models/user.model.js";
 import { Admin, AdminDetail } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
 
+async function sendEmail(req, res) {
+}
+
 export const asignup = async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -117,6 +120,20 @@ export const alogin = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
+export const verify = async (req, res) => {
+    try {
+        const reg_id = req.params;
+        const user = await User.findOne({ reg_id });
+        user.verified = true;
+        await user.save();
+        res.status(200).json({ _id: user._id, reg_id: user.reg_id, verified: user.verified });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+
+
+}
 
 export const logout = (req, res) => {
     try {
