@@ -15,13 +15,13 @@ async function sendEmail(user) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'worqubeofficial@gmail.com',
-            pass: 'WorkCube#123'
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD,
         },
     });
 
     const mailOptions = {
-        from: 'worqubeofficial@gmail.com',
+        from: process.env.EMAIL,
         to: user.email,
         subject: 'Verify your email',
         text: `Please click on the link to verify your email: ${verificationURL}`,
@@ -85,6 +85,7 @@ export const signup = async (req, res) => {
             reg_id: reg_id,
             email: email,
             password: hashedPW,
+            verified: false,
         });
 
         if (newUser) {
@@ -94,6 +95,7 @@ export const signup = async (req, res) => {
                 userId: newUser._id,
             });
             await newDetails.save();
+            console.log(newUser, newDetails);
             await sendEmail(newUser);
             res.status(201).json({ newUser });
         } else {
@@ -123,7 +125,7 @@ export const login = async (req, res) => {
                 email: user.email,
             });
         } else {
-            const link = `https://job-portal-6nsa/verify/${user.reg_id}/${user.verificationToken}`;
+            const link = `https::/job-portal-6nsa.onrender.com/verify/${user.reg_id}/${user.verificationToken}`;
             res.json({ message: `Follow this link to verify ${link}` });
         }
     } catch (error) {
@@ -169,10 +171,10 @@ export const verify = async (req, res, next) => {
 
 export const logout = (req, res) => {
     try {
-        res.cookie("token", "", {
-            maxAge: 0,
-            domain: 'job-portal-6nsa.onrender.com',
-            path: '/auth/check',
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "strict",
+            secure: true,
         });
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
