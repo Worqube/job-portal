@@ -12,7 +12,7 @@ const Navbar = () => {
 
   // Determine button text and link based on current page
   const isLoginPage = location.pathname === "/login";
-  const isHome = location.pathname === "/home";
+  const isHome = location.pathname === "/";
   const buttonText = isLoginPage ? "Sign Up" : "Login";
   const buttonLink = isLoginPage ? "/signup" : "/login";
 
