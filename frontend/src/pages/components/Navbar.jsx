@@ -1,12 +1,20 @@
 import React from "react";
 import { useAuthStore } from "../../store/useAuthStore";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
+  const location = useLocation(); // Get the current route
 
   // Ensure user data is retrieved properly
   const storedUser = sessionStorage.getItem("user");
   const loggedIn = authUser || storedUser;
+
+  // Determine button text and link based on current page
+  const isLoginPage = location.pathname === "/login";
+  const isSignupPage = location.pathname === "/signup";
+  const buttonText = isLoginPage ? "Sign Up" : "Login";
+  const buttonLink = isLoginPage ? "/signup" : "/login";
 
   return (
     <div className="navbar h-fit">
@@ -15,22 +23,22 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="space-x-8">
-          <a href="#" className="text-gray-600 hover:text-gray-900">
+          <Link to="/" className="text-gray-600 hover:text-gray-900">
             Home
-          </a>
+          </Link>
           {loggedIn && (
-            <a href="#" className="text-gray-600 hover:text-gray-900">
+            <Link to="/jobs" className="text-gray-600 hover:text-gray-900">
               Jobs
-            </a>
+            </Link>
           )}
           {loggedIn && (
-            <a href="#" className="text-gray-600 hover:text-gray-900">
+            <Link to="/companies" className="text-gray-600 hover:text-gray-900">
               Companies
-            </a>
+            </Link>
           )}
-          <a href="#" className="text-gray-600 hover:text-gray-900">
+          <Link to="/about" className="text-gray-600 hover:text-gray-900">
             About
-          </a>
+          </Link>
         </div>
 
         {/* Auth Button */}
@@ -42,9 +50,11 @@ const Navbar = () => {
             Logout
           </button>
         ) : (
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Login
-          </button>
+          <Link to={buttonLink}>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              {buttonText}
+            </button>
+          </Link>
         )}
       </nav>
     </div>
