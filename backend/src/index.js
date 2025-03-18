@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     origin: 'https://worqube.onrender.com',
-    withCredentials: true
+    credentials: true
 }))
 
 app.use('/users', userRoutes);
