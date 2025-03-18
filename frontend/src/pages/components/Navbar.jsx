@@ -1,23 +1,30 @@
 import React from "react";
 import { useAuthStore } from "../../store/useAuthStore";
-import NavHeader from "../../components/nav-header.jsx";
-import { Link } from "react-router-dom";
-import logo from "../../assets/logo-worqube.jpg";
-import { LogOut, MessagesSquare, Settings, User } from "lucide-react";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
   return (
     <div className="navbar h-fit">
-      <div className="flex items-center justify-between">
-        <img className="size-30" src={logo}></img>
-        <NavHeader />
-        <Link to="/profile">
-          <button className="font-semibold text-lg w-20 h-12 rounded-lg border-2 border-black bg-white p-2 mr-10 hover:bg-black hover:text-white transition-all duration-100">
-            Profile
-          </button>
-        </Link>
-      </div>
+      <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
+        <div className="text-xl font-bold">TNP Nexus</div>
+        <div className="space-x-8">
+          <a href="#" className="text-gray-600 hover:text-gray-900">
+            Home
+          </a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">
+            Jobs
+          </a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">
+            Companies
+          </a>
+          <a href="#" className="text-gray-600 hover:text-gray-900">
+            About
+          </a>
+        </div>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded">
+          Login
+        </button>
+      </nav>
     </div>
   );
 };
