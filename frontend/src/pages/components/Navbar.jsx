@@ -12,7 +12,7 @@ const Navbar = () => {
 
   // Determine button text and link based on current page
   const isLoginPage = location.pathname === "/login";
-  const isSignupPage = location.pathname === "/signup";
+  const isHome = location.pathname === "/home";
   const buttonText = isLoginPage ? "Sign Up" : "Login";
   const buttonLink = isLoginPage ? "/signup" : "/login";
 
@@ -49,12 +49,14 @@ const Navbar = () => {
           >
             Logout
           </button>
-        ) : (
+        ) : isHome ? (
           <Link to={buttonLink}>
             <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
               {buttonText}
             </button>
           </Link>
+        ) : (
+          <></>
         )}
       </nav>
     </div>

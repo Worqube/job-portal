@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
@@ -16,12 +17,16 @@ const HomePage = () => {
           build the future.
         </p>
         <div className="space-x-4">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded">
-            Student Login
-          </button>
-          <button className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded">
-            Browse Opportunities
-          </button>
+          <Link to="/login">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded">
+              Student Login
+            </button>
+          </Link>
+          <Link to="/signup">
+            <button className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded">
+              Get Started
+            </button>
+          </Link>
         </div>
       </section>
       {/* Statistics Section */}
