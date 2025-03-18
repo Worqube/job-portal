@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <div className="navbar h-fit">
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
-        <div className="text-xl font-bold">TNP Nexus</div>
+        <div className="text-xl font-bold">Worqube</div>
 
         {/* Navigation Links */}
         <div className="space-x-8">
