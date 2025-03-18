@@ -101,7 +101,7 @@ import React from "react";
 const Dashboard = () => {
   return (
     <div>
-      <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
+      {/* <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
         <div className="text-xl font-bold">TNP Nexus</div>
         <div className="space-x-8">
           <a href="#" className="text-gray-600 hover:text-gray-900">
@@ -120,7 +120,7 @@ const Dashboard = () => {
         <button className="bg-blue-600 text-white px-4 py-2 rounded">
           Login
         </button>
-      </nav>
+      </nav> */}
       {/* Hero Section */}
       <section className="text-center py-20 bg-gray-50">
         <div className="text-sm text-blue-600 mb-2">
