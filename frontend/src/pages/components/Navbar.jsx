@@ -23,7 +23,7 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="space-x-8">
-          <Link to="/" className="text-gray-600 hover:text-gray-900">
+          <Link to="/home" className="text-gray-600 hover:text-gray-900">
             Home
           </Link>
           {loggedIn && (
