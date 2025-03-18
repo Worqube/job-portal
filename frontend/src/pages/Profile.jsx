@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAuthStore } from "../../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Profile = () => {
   const { userData, profileData, isLoading } = useAuthStore();
