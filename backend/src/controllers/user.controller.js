@@ -92,11 +92,11 @@ export const updateUserDetails = async (req, res) => {
 };
 
 export const loadData = async (req, res) => {
-  const { userid } = req.body;
-  if (!userid) return res.status(400).json({ message: "UserID is required" });
+  const { reg_id } = req.body;
+  if (!reg_id) return res.status(400).json({ message: "UserID is required" });
 
   try {
-    const user = await User.findById(userid);
+    const user = await User.findOne({ reg_id: reg_id });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const userDetails = await Detail.findOne({ userId: user._id });
