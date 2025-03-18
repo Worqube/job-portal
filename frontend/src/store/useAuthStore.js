@@ -76,7 +76,7 @@ export const useAuthStore = create(
                 set({ isLoading: true })
                 try {
                     const user = JSON.parse(sessionStorage.getItem('user'));
-                    const res = await axiosInstance.post('/users/loadData', user._id, { withCredentials: true });
+                    const res = await axiosInstance.post('/users/loadData', user.reg_id, { withCredentials: true });
                     set({ userData: res.data });
                     sessionStorage.setItem("userData", JSON.stringify(res.data));
                 } catch (error) {

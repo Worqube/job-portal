@@ -7,7 +7,7 @@ router.get('/', userProfile);
 router.get('/details', userDetails);
 router.post('/', updateUserProfile);
 router.post('/details', updateUserDetails);
-router.get('/loadData', loadData);
+router.post('/loadData', loadData);
 
 
 export default router;
