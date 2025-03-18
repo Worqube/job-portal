@@ -90,3 +90,30 @@ export const updateUserDetails = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const loadData = async (req, res) => {
+  const { userid } = req.body;
+  if (!userid) return res.status(400).json({ message: "UserID is required" });
+
+  try {
+    const user = await User.findById(userid);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const userDetails = await Detail.findOne({ userId: user._id });
+
+    const userData = {
+      reg_id: user.reg_id,
+      email: user.email,
+      fullname: userDetails.fullname,
+      profilepic: userDetails.profilepic,
+      address: userDetails.address,
+      gender: userDetails.gender,
+      phone: userDetails.phone,
+      postal_code: userDetails.postal_code,
+      branch: userDetails.branch,
+    }
+    res.status(200).send(userData);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}

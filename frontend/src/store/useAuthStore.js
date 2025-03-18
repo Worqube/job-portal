@@ -7,10 +7,12 @@ export const useAuthStore = create(
     persist(
         (set) => ({
             authUser: null,
+            userData: null,
             isSigningUp: false,
             isCheckingAuth: true,
             isLoggingIn: false,
             isLoggingOut: false,
+            isLoading: false,
 
             checkAuth: async () => {
                 const user = sessionStorage.getItem('user');
@@ -47,6 +49,7 @@ export const useAuthStore = create(
                     const res = await axiosInstance.post('/auth/login', data, { withCredentials: true });
                     set({ authUser: res.data });
                     sessionStorage.setItem("user", JSON.stringify(res.data));
+                    await get().profileData();
                     toast.success('Logged in successfully');
                 } catch (error) {
                     set({ authUser: null });
@@ -67,6 +70,19 @@ export const useAuthStore = create(
                     toast.error("Error in controller");
                 } finally {
                     set({ isLoggingIn: false });
+                }
+            },
+            profileData: async (data) => {
+                set({ isLoading: true })
+                try {
+                    const user = JSON.parse(sessionStorage.getItem('user'));
+                    const res = await axiosInstance.post('/user/loadData', user._id, { withCredentials: true });
+                    set({ userData: res.data });
+                    sessionStorage.setItem("userData", JSON.stringify(res.data));
+                } catch (error) {
+                    console.error("Error fetching profile:", error);
+                } finally {
+                    set({ isLoading: false });
                 }
             },
             logout: async () => {
