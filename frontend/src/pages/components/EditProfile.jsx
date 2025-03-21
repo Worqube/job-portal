@@ -5,6 +5,7 @@ const EditProfile = () => {
   const { userData, editProfile } = useAuthStore();
   const [formData, setFormData] = useState(userData || {});
   const [profilePic, setProfilePic] = useState(userData.profilepic || "");
+  const [file, setFile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -12,10 +13,10 @@ const EditProfile = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, profilepic: file });
-      setProfilePic(URL.createObjectURL(file));
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setProfilePic(URL.createObjectURL(selectedFile));
     }
   };
 
@@ -23,9 +24,15 @@ const EditProfile = () => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
+    // Append text fields
     Object.keys(formData).forEach((key) => {
       formDataToSend.append(key, formData[key]);
     });
+
+    // Append file if selected
+    if (file) {
+      formDataToSend.append("profilepic", file);
+    }
 
     await editProfile(formDataToSend);
     console.log("Profile updated:", formData);

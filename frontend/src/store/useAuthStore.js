@@ -96,7 +96,7 @@ export const useAuthStore = create(
                 set({ isLoading: true });
                 const user = JSON.parse(sessionStorage.getItem('user'));
                 try {
-                    const res = await axiosInstance.post(`/users/editProfile/${user.reg_id}`, data, { withCredentials: true });
+                    const res = await axiosInstance.put(`/users/editProfile/${user.reg_id}`, data, { withCredentials: true });
                     set({ userData: res.data });
                     sessionStorage.setItem("userData", JSON.stringify(res.data));
                     toast.success("Data updated successfully");

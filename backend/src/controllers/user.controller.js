@@ -1,5 +1,16 @@
 import { User, Detail } from "../models/user.model.js";
 import bcrypt from 'bcryptjs';
+import { v2 as cloudinary } from 'cloudinary';
+import multer from 'multer';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = multer.memoryStorage();
+export const upload = multer({ storage }).single('profilepic');
 
 export const userProfile = async (req, res) => {
   const regId = req.query.regId;
@@ -121,24 +132,61 @@ export const loadData = async (req, res) => {
 export const editProfile = async (req, res) => {
   const { reg_id } = req.params;
   const { fullname, branch, phone, gender, address } = req.body;
+
   try {
     const user = await User.findOne({ reg_id: reg_id });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const details = await Detail.findOne({ userId: user._id });
-    if (details) {
-      details.fullname = fullname;
-      details.branch = branch;
-      details.phone = phone;
-      details.gender = gender;
-      details.address = address;
-
-      await details.save();
-      res.status(200).send(details);
-    } else {
-      return res.status(404).json({ message: "Details not found" });
+    let details = await Detail.findOne({ userId: user._id });
+    if (!details) {
+      details = new Detail({ userId: user._id });
     }
+
+    // Update text fields
+    details.fullname = fullname || details.fullname;
+    details.branch = branch || details.branch;
+    details.phone = phone || details.phone;
+    details.gender = gender || details.gender;
+    details.address = address || details.address;
+
+    // Upload new profile picture if provided
+    if (req.file) {
+      try {
+        // Delete previous profile picture from Cloudinary
+        if (details.profilepic) {
+          const publicId = details.profilepic.split("/").pop().split(".")[0]; // Extract public ID
+          await cloudinary.uploader.destroy(`profile_pictures/${publicId}`);
+        }
+
+        // Upload new profile picture
+        const result = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: "profile_pictures" },
+            (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            }
+          );
+          uploadStream.end(req.file.buffer);
+        });
+
+        if (result && result.secure_url) {
+          details.profilepic = result.secure_url;
+          details.markModified("profilepic"); // Ensure Mongoose detects change
+        }
+      } catch (error) {
+        console.error("Cloudinary Upload Error:", error);
+        return res.status(500).json({ message: "Image upload failed", error });
+      }
+    }
+
+    await details.save();
+    return res.status(200).json({ message: "Profile updated successfully", details });
   } catch (error) {
-    res.status(500).send(error);
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Server error", error });
   }
-}
+};

@@ -16,9 +16,15 @@ const Profile = () => {
             className="w-24 h-24 rounded-full border shadow-md object-cover"
           />
           <div>
-            <h2 className="text-2xl font-semibold">{userData.fullname}</h2>
-            <p className="text-gray-500">{userData.branch}</p>
-            <p className="text-gray-600">{user.email}</p>
+            <h2 className="text-2xl font-semibold">
+              {userData.fullname || "User"}
+            </h2>
+            <p className="text-gray-500">
+              {userData.branch || "Not specified"}
+            </p>
+            <p className="text-gray-600">
+              {user.email || "No email available"}
+            </p>
           </div>
         </div>
 
@@ -30,22 +36,6 @@ const Profile = () => {
             </button>
           </Link>
         </div>
-
-        {/* Skills Section */}
-        {/* <div className="mt-6">
-          <h3 className="text-xl font-semibold">Skills</h3>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {userData.skills && userData.skills.length > 0 ? (
-              userData.skills.map((skill, index) => (
-                <span key={index} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
-                  {skill}
-                </span>
-              ))
-            ) : (
-              <p className="text-gray-500">No skills added.</p>
-            )}
-          </div>
-        </div> */}
       </div>
     </div>
   );
