@@ -10,6 +10,8 @@ import Navbar from "./pages/components/Navbar";
 import Profile from "./pages/Profile";
 import Verify from "./pages/components/Verify";
 import HomePage from "./pages/components/HomePage";
+import JobDetails from "./pages/components/JobDetail";
+import EditProfile from "./pages/components/EditProfile";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -19,6 +21,8 @@ const App = () => {
   }, [checkAuth]);
 
   console.log({ authUser });
+
+  const user = JSON.parse(sessionStorage.getItem("user")) || {};
 
   if (isCheckingAuth && !authUser)
     return (
@@ -30,11 +34,7 @@ const App = () => {
     <div className="items-center">
       <Navbar />
       <Routes>
-        <Route
-          path="/dashboard"
-          element={authUser ? <Dashboard /> : <Navigate to="/login" />}
-        />
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={authUser ? <Dashboard /> : <HomePage />} />
         <Route
           path="/signup"
           element={
@@ -54,6 +54,11 @@ const App = () => {
           element={!authUser ? <Login /> : <Navigate to="/" />}
         />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/jobs/:jobId" element={<JobDetails />} />
+        <Route
+          path={`/users/editProfile/${user.reg_id}`}
+          element={<EditProfile />}
+        />
       </Routes>
       <Toaster />
     </div>

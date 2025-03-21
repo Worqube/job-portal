@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: true,
             unique: true,
             trim: true,
             lowercase: true,
@@ -19,6 +18,11 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             minlength: 8,
+        },
+        role: {
+            type: String,
+            default: "user",
+            required: true,
         },
         verified: {
             type: Boolean,
@@ -71,7 +75,10 @@ const detailSchema = new mongoose.Schema(
             type: String,
             trim: true,
             uppercase: true,
-        }
+        },
+        appliedJobs: [{
+            type: mongoose.Schema.Types.ObjectId, ref: 'Job'
+        }],
     },
     { timestamps: true }
 );

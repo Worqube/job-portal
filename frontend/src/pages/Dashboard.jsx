@@ -1,203 +1,91 @@
-<>
-  {/* Navbar */}
-  <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
-    <div className="text-xl font-bold">TNP Nexus</div>
-    <div className="space-x-8">
-      <a href="#" className="text-gray-600 hover:text-gray-900">
-        Home
-      </a>
-      <a href="#" className="text-gray-600 hover:text-gray-900">
-        Jobs
-      </a>
-      <a href="#" className="text-gray-600 hover:text-gray-900">
-        Companies
-      </a>
-      <a href="#" className="text-gray-600 hover:text-gray-900">
-        About
-      </a>
-    </div>
-    <button className="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
-  </nav>
-  {/* Hero Section */}
-  <section className="text-center py-20 bg-gray-50">
-    <div className="text-sm text-blue-600 mb-2">
-      PICT Training &amp; Placement Cell
-    </div>
-    <h1 className="text-4xl font-bold mb-4">
-      Your Gateway to <span className="text-blue-600">Career Excellence</span>
-    </h1>
-    <p className="text-gray-600 mb-8">
-      Connecting talented students with industry-leading opportunities to build
-      the future.
-    </p>
-    <div className="space-x-4">
-      <button className="bg-blue-600 text-white px-6 py-2 rounded">
-        Student Login
-      </button>
-      <button className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded">
-        Browse Opportunities
-      </button>
-    </div>
-  </section>
-  {/* Statistics Section */}
-  <section className="flex justify-center space-x-8 py-12 bg-gray-50">
-    <div className="text-center">
-      <div className="text-2xl font-bold">500+</div>
-      <div className="text-gray-600">Companies</div>
-    </div>
-    <div className="text-center">
-      <div className="text-2xl font-bold">95%</div>
-      <div className="text-gray-600">Placement Rate</div>
-    </div>
-    <div className="text-center">
-      <div className="text-2xl font-bold">₹36 LPA</div>
-      <div className="text-gray-600">Highest Package</div>
-    </div>
-  </section>
-  {/* Features Section */}
-  <section className="py-20 bg-gray-50">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold">Features</h2>
-      <p className="text-gray-600">
-        Our platform offers powerful tools to help students showcase their
-        skills and connect with top employers.
-      </p>
-    </div>
-    <div className="flex justify-center space-x-8">
-      <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <div className="text-blue-600 mb-4">
-          <i className="fas fa-user-cog fa-2x" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Smart Profile Management</h3>
-        <p className="text-gray-600">
-          Build and manage your comprehensive profile.
-        </p>
-      </div>
-      <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <div className="text-blue-600 mb-4">
-          <i className="fas fa-briefcase fa-2x" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Job Listings</h3>
-        <p className="text-gray-600">
-          Browse through a curated list of opportunities.
-        </p>
-      </div>
-      <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <div className="text-blue-600 mb-4">
-          <i className="fas fa-graduation-cap fa-2x" />
-        </div>
-        <h3 className="text-xl font-bold mb-2">Education Tracking</h3>
-        <p className="text-gray-600">
-          Keep your academic credentials, certifications, and achievements up to
-          date.
-        </p>
-      </div>
-    </div>
-  </section>
-</>;
-
-import React from "react";
+import { useState, useEffect } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Dashboard = () => {
+  const [jobs, setJobs] = useState([]);
+  const [expandedJob, setExpandedJob] = useState(null);
+  const [user, setUser] = useState({ appliedJobs: [] });
+
+  useEffect(() => {
+    fetch("http://localhost:6060/jobs")
+      .then((res) => res.json())
+      .then((data) => setJobs(data));
+  }, []);
+
+  const applyJob = useAuthStore();
+
   return (
-    <div>
-      {/* <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md">
-        <div className="text-xl font-bold">TNP Nexus</div>
-        <div className="space-x-8">
-          <a href="#" className="text-gray-600 hover:text-gray-900">
-            Home
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">
-            Jobs
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">
-            Companies
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">
-            About
-          </a>
-        </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded">
-          Login
-        </button>
-      </nav> */}
-      {/* Hero Section */}
-      <section className="text-center py-20 bg-gray-50">
-        <div className="text-sm text-blue-600 mb-2">
-          PICT Training &amp; Placement Cell
-        </div>
-        <h1 className="text-4xl font-bold mb-4">
-          Your Gateway to{" "}
-          <span className="text-blue-600">Career Excellence</span>
-        </h1>
-        <p className="text-gray-600 mb-8">
-          Connecting talented students with industry-leading opportunities to
-          build the future.
-        </p>
-        <div className="space-x-4">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded">
-            Student Login
-          </button>
-          <button className="bg-white text-blue-600 border border-blue-600 px-6 py-2 rounded">
-            Browse Opportunities
-          </button>
-        </div>
-      </section>
-      {/* Statistics Section */}
-      <section className="flex justify-center space-x-8 py-12 bg-gray-50">
-        <div className="text-center">
-          <div className="text-2xl font-bold">500+</div>
-          <div className="text-gray-600">Companies</div>
-        </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold">95%</div>
-          <div className="text-gray-600">Placement Rate</div>
-        </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold">₹36 LPA</div>
-          <div className="text-gray-600">Highest Package</div>
-        </div>
-      </section>
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">Features</h2>
-          <p className="text-gray-600">
-            Our platform offers powerful tools to help students showcase their
-            skills and connect with top employers.
-          </p>
-        </div>
-        <div className="flex justify-center space-x-8">
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-blue-600 mb-4">
-              <i className="fas fa-user-cog fa-2x" />
+    <div className="relative p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {jobs.map((job) => (
+        <div
+          key={job._id}
+          className={`border rounded-lg p-4 shadow-lg bg-white cursor-pointer transition-all duration-400 ${
+            expandedJob && expandedJob !== job._id ? "blur-sm" : ""
+          }`}
+          onClick={() =>
+            setExpandedJob(expandedJob === job._id ? null : job._id)
+          }
+        >
+          <div className="flex items-center gap-3">
+            <img
+              src={job.logo}
+              alt={job.company}
+              className="w-12 h-12 rounded-full"
+            />
+            <div>
+              <h3 className="text-lg font-semibold">{job.company}</h3>
+              <p className="text-gray-500">{job.role}</p>
+              <p className="text-green-600 font-medium">
+                {job.salary ? `$${job.salary}` : "Unpaid"}
+              </p>
             </div>
-            <h3 className="text-xl font-bold mb-2">Smart Profile Management</h3>
-            <p className="text-gray-600">
-              Build and manage your comprehensive profile.
-            </p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-blue-600 mb-4">
-              <i className="fas fa-briefcase fa-2x" />
+          {expandedJob === job._id && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black/5 z-50">
+              <div className="relative w-96 h-96 bg-white shadow-xl rounded-lg p-6 flex flex-col">
+                <button
+                  className="absolute top-2 right-2 bg-gray-200 p-2 rounded-full"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setExpandedJob(null);
+                  }}
+                >
+                  ✖
+                </button>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={job.logo}
+                    alt={job.company}
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div>
+                    <h3 className="text-lg font-semibold">{job.company}</h3>
+                    <p className="text-gray-500">{job.role}</p>
+                    <p className="text-green-600 font-medium">
+                      {job.salary ? `$${job.salary}` : "Unpaid"}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 border-t pt-2">
+                  <p className="text-sm text-gray-700">{job.description}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {job.location} ({job.type})
+                  </p>
+                  <button
+                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      applyJob(job._id);
+                    }}
+                  >
+                    {user.appliedJobs.includes(job._id) ? "Applied" : "Apply"}
+                  </button>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">Job Listings</h3>
-            <p className="text-gray-600">
-              Browse through a curated list of opportunities.
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="text-blue-600 mb-4">
-              <i className="fas fa-graduation-cap fa-2x" />
-            </div>
-            <h3 className="text-xl font-bold mb-2">Education Tracking</h3>
-            <p className="text-gray-600">
-              Keep your academic credentials, certifications, and achievements
-              up to date.
-            </p>
-          </div>
+          )}
         </div>
-      </section>
+      ))}
     </div>
   );
 };

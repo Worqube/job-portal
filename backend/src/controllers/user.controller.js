@@ -93,7 +93,7 @@ export const updateUserDetails = async (req, res) => {
 
 export const loadData = async (req, res) => {
   const { reg_id } = req.body;
-  if (!reg_id) return res.status(400).json({ message: "UserID is required" });
+  // if (!reg_id) return res.status(400).json({ message: "RegID is required" });
 
   try {
     const user = await User.findOne({ reg_id: reg_id });
@@ -113,6 +113,31 @@ export const loadData = async (req, res) => {
       branch: userDetails.branch,
     }
     res.status(200).send(userData);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+export const editProfile = async (req, res) => {
+  const { reg_id } = req.params;
+  const { fullname, branch, phone, gender, address } = req.body;
+  try {
+    const user = await User.findOne({ reg_id: reg_id });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const details = await Detail.findOne({ userId: user._id });
+    if (details) {
+      details.fullname = fullname;
+      details.branch = branch;
+      details.phone = phone;
+      details.gender = gender;
+      details.address = address;
+
+      await details.save();
+      res.status(200).send(details);
+    } else {
+      return res.status(404).json({ message: "Details not found" });
+    }
   } catch (error) {
     res.status(500).send(error);
   }

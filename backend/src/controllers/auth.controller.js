@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { Detail, User } from "../models/user.model.js";
-import { Admin, AdminDetail } from "../models/admin.model.js";
 import { generateToken } from "../lib/utils.js";
 
 async function sendEmail(user) {
@@ -33,22 +32,23 @@ async function sendEmail(user) {
 export const asignup = async (req, res) => {
     const { username, password } = req.body;
     try {
-        let admin = await Admin.findOne({ username });
+        let admin = await User.findOne({ reg_id: username });
         if (admin) return res.status(400).json({ message: "Username already exists" });
 
         const salt = await bcrypt.genSalt(10);
         const hashedPW = await bcrypt.hash(password, salt);
 
-        const newAdmin = new Admin({
-            username: username,
+        const newAdmin = new User({
+            reg_id: username,
             password: hashedPW,
+            role: 'admin',
         });
 
         if (newAdmin) {
             generateToken(newAdmin._id, res);
             await newAdmin.save();
-            const newAdminDetails = new AdminDetail({
-                adminId: newAdmin._id,
+            const newAdminDetails = new Detail({
+                userId: newAdmin._id,
             });
             await newAdminDetails.save();
             console.log(newAdmin, newAdminDetails);
@@ -138,15 +138,16 @@ export const alogin = async (req, res) => {
     if (!username || !password) return res.status(400).json({ message: "All fields are required" });
 
     try {
-        const admin = await Admin.findOne({ username });
+        const admin = await User.findOne({ reg_id: username });
         if (!admin) return res.status(404).json({ message: "Admin not found" });
+        if (admin.role === 'user') return res.status(400).json({ message: "Not an admin" });
         const isPassword = await bcrypt.compare(password, admin.password);
         if (!isPassword) return res.status(400).json({ message: "Password is incorrect" });
 
         generateToken(admin._id, res);
         res.json({
             _id: admin._id,
-            username: admin.username,
+            username: admin.reg_id,
         });
     } catch (error) {
         res.status(500).send(error);
